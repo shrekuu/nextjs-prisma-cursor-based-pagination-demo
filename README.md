@@ -2,35 +2,64 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First create a postgres db. You can use these script if you have postgres installed locally.
+
+Follow these steps to set up your local Postgres database:
+
+1. **Create a new database user for Prisma (safer than using `postgres`):**
+
+```sql
+CREATE USER prisma_user WITH PASSWORD 'prisma_password';
+```
+
+2. **Create the main database for your app:**
+
+```sql
+CREATE DATABASE prisma_app_db OWNER prisma_user;
+```
+
+3. **Grant privileges so Prisma can manage migrations, etc.:**
+
+```sql
+GRANT ALL PRIVILEGES ON DATABASE prisma_app_db TO prisma_user;
+```
+
+4. **(Optional but recommended) Allow schema modifications:**
+
+```sql
+ALTER USER prisma_user CREATEDB;
+```
+
+After this, add the following to your `.env.local` file:
+
+```env
+DATABASE_URL="postgresql://prisma_user:prisma_password@localhost:5432/prisma_app_db"
+```
+
+Then install the necessary dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+```
+
+Then generate the Prisma client:
+
+```bash
+pnpm prisma generate
+```
+
+Then run the database migrations:
+
+```bash
+pnpm prisma migrate dev
+```
+
+Then, run the development server:
+
+```bash
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Now open 2 pages, and try to delete the last item from one page, then click 'load more' button on the other. You see, compared to offset-based pagination, it did not skip any items on the page.
