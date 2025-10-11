@@ -4,36 +4,19 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First create a postgres db. You can use these script if you have postgres installed locally.
 
-Follow these steps to set up your local Postgres database:
+Create a **temporary** database for testing:
 
-1. **Create a new database user for Prisma (safer than using `postgres`):**
-
-```sql
-CREATE USER prisma_user WITH PASSWORD 'prisma_password';
+```bash
+npx create-db
 ```
 
-2. **Create the main database for your app:**
+copy the connection string line your `.env.local` file.
 
-```sql
-CREATE DATABASE prisma_app_db OWNER prisma_user;
-```
+your `.env.local` will look like this:
 
-3. **Grant privileges so Prisma can manage migrations, etc.:**
+```ini
+DATABASE_URL="postgresql://prisma_user:prisma_password@db.prisma.io:5432/prisma_app_db?sslmode=require"
 
-```sql
-GRANT ALL PRIVILEGES ON DATABASE prisma_app_db TO prisma_user;
-```
-
-4. **(Optional but recommended) Allow schema modifications:**
-
-```sql
-ALTER USER prisma_user CREATEDB;
-```
-
-After this, add the following to your `.env.local` file:
-
-```env
-DATABASE_URL="postgresql://prisma_user:prisma_password@localhost:5432/prisma_app_db"
 ```
 
 Then install the necessary dependencies:
