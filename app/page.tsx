@@ -9,6 +9,7 @@ export default async function Page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   if (session) {
     redirect("/dashboard");
   }
@@ -18,9 +19,6 @@ export default async function Page() {
       <div>未登录</div>
       <div>
         <Link href="/auth/sign-in">better auth ui</Link>
-      </div>
-      <div>
-        <Auth />
       </div>
     </div>
   );

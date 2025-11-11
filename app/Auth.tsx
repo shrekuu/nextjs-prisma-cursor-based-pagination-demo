@@ -3,6 +3,7 @@
 import React from "react";
 import { authClient } from "@/lib/auth-client"; //import the auth client
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Auth() {
   const router = useRouter();
@@ -73,7 +74,11 @@ export default function Auth() {
 
   return (
     <div className="font-sans">
-      <div className="mx-auto  max-w-4xl flex flex-col gap-4 p-4">
+      <Link className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" href="/auth/sign-in">
+        Better Auth UI
+      </Link>
+
+      {/* <div className="mx-auto  max-w-4xl flex flex-col gap-4 p-4">
         <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onClick={handleSignUp}>
           Sign Up
         </button>
@@ -85,7 +90,7 @@ export default function Auth() {
         <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onClick={handleSignInWithGoogle}>
           sign in with google
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

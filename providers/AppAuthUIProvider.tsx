@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 
 import { authClient } from "@/lib/auth-client";
 
-export function Providers({ children }: { children: ReactNode }) {
+export default function AppAuthUIProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   return (

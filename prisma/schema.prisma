@@ -25,6 +25,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  walletaddresss WalletAddress[]
+
   @@unique([email])
   @@map("user")
 }
@@ -72,4 +74,16 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model WalletAddress {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address   String
+  chainId   Int
+  isPrimary Boolean? @default(false)
+  createdAt DateTime
+
+  @@map("walletAddress")
 }
