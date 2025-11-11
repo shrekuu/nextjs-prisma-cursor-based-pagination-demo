@@ -26,8 +26,7 @@ export default function Auth() {
         },
         onSuccess: (ctx) => {
           //redirect to the dashboard or sign in page
-
-          router.push("/dashboard");
+          // router.push("/dashboard");
         },
         onError: (ctx) => {
           // display the error message
@@ -67,7 +66,7 @@ export default function Auth() {
       provider: "google",
     });
 
-    console.log("data", data);
+    // console.log("data", data);
 
     router.push("/dashboard");
   };

@@ -2,15 +2,22 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@/generated/prisma/client";
 import { siwe } from "better-auth/plugins";
-import { verifySiweMessage, generateSiweNonce } from "viem/siwe";
+import { verifySiweMessage, generateSiweNonce, parseSiweMessage } from "viem/siwe";
 import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
+import { SiweMessage } from "siwe";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
+    },
+  },
   emailAndPassword: {
     enabled: true,
   },
@@ -27,24 +34,28 @@ export const auth = betterAuth({
       // anonymous: false, // optional, default is true
       getNonce: async () => {
         const nonce = await generateSiweNonce();
-
-        console.log("nonce", nonce);
         return nonce;
       },
       verifyMessage: async ({ message, signature, address }) => {
         try {
-          const publicClient = createPublicClient({
-            chain: mainnet,
-            transport: http(),
-          });
+          //  Method 1: making http request to verify SIWE message
+          // takes too much time
+          // const publicClient = createPublicClient({
+          //   chain: mainnet,
+          //   transport: http(),
+          // });
 
-          console.log({ message, signature, address });
-          const valid = await publicClient.verifySiweMessage({
-            message,
-            signature: signature as `0x${string}`,
-          });
+          // const valid = await publicClient.verifySiweMessage({
+          //   message,
+          //   signature: signature as `0x${string}`,
+          // });
 
-          return valid;
+          // method: 2: using siwe library to verify SIWE message cryptographically locally only
+          // quick
+          const siweMessage = new SiweMessage(message);
+          const res = await siweMessage.verify({ signature });
+
+          return res.success;
         } catch (error) {
           console.error("SIWE verification failed:", error);
           return false;

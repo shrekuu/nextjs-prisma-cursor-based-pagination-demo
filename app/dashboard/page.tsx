@@ -3,14 +3,11 @@ import React from "react";
 import BtnSignOut from "./BtnSignOut";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { AccountView } from "@daveyplate/better-auth-ui";
 
 export default async function page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
-  console.log("session", session);
 
   if (!session) {
     redirect("/");
@@ -18,9 +15,16 @@ export default async function page() {
 
   return (
     <div className="max-w-5xl p-10">
-      <AccountView />
-
       <BtnSignOut />
+      <h1 className="mb-4 text-3xl font-bold">Dashboard</h1>
+      <p className="mb-8">Welcome to your dashboard!</p>
+      {/* Other dashboard content can go here */}
+
+      <div>
+        <pre>
+          <code>{JSON.stringify(session, null, 2)}</code>
+        </pre>
+      </div>
     </div>
   );
 }
